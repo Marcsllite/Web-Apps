@@ -40,8 +40,24 @@ div.wrapper {
   gap: 20px;
 }
 
-/* Information */
-.info-box {
+a {
+  background: var(--secondary1Dark);
+  color: var(--primary1Light);
+  display: inline-block;
+  text-decoration: underline;
+  text-align: center;
+  font-style: italic;
+  text-transform: lowercase;
+  font-size: 1rem;
+}
+
+a:hover {
+  background: var(--primary1Dark);
+  color: var(--onPrimary);
+}
+
+/* Introductory Box */
+.intro-box {
   text-align: center;
   padding: 1.5rem;
 }
@@ -71,11 +87,11 @@ img {
 
 .main-nav a {
   background: var(--primary1Dark);
+  color: var(--onPrimary);
   display: block;
   text-decoration: none;
   padding: .8rem;
   text-align: center;
-  color: var(--onPrimary);
   text-transform: uppercase;
   font-size: 1rem;
 }
@@ -84,4 +100,51 @@ img {
   background: var(--secondary1Dark);
   color: var(--primary1Light);
   border: 1px solid var(--primary1Light);
+}
+
+/* Information Boxes */
+.boxes {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  /* auto-fit tells the browser to handle resizing of the columns to fit the current width
+  So we will get multiple columns or less depending on window size
+  
+  minmax tells the minimum width and max width of each box item. here we are
+  repeating minmax(400px, 1fr) auto-fit times. min max basically forces a max number
+  of columns depending on our min value. if auto-fit is 10 and your window is only 50 pixels
+  wide and the minimum value for each column is 10 pixels. there will only be 5 columns
+  on the browser because we cant fit all 10 columns each at 10 pixels in a 50 pixel screen.
+  the columns then will be drawn at the minimum value we set and the remaining columns will move
+  down to the next row at that minimum size until we have added all the columns
+
+  1fr makes each box 1 fraction of the auto-fit number 
+  (if auto-fit = 5 and there are 5 boxes, each box will be 1/5 the screen width)*/
+}
+
+.box {
+  background:var(--primary1Dark);
+  color: var(--onPrimary1);
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.box:hover {
+  background: var(--secondary1Dark);
+  color: var(--primary1Light);
+  border: 1px solid var(--primary1Light);
+}
+
+.boxlink {
+  color: var(--onPrimary1);
+  display: inline;
+  text-decoration: none;
+  text-align: center;
+  font-style: normal;
+  text-transform: none;
+}
+
+.boxh4 {
+  background: var(--secondary1Dark);
+  color: var(--onPrimary1);
 }
