@@ -73,6 +73,7 @@ img {
 .main-nav {
   width: 50%;
   margin: auto;
+  text-align: center;
 }
 
 .main-nav ul {
@@ -82,7 +83,7 @@ img {
   gap: 20px;
   padding-bottom: 20px;
   list-style: none;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: 1fr;
 }
 
 .main-nav a {
@@ -106,7 +107,7 @@ img {
 .boxes {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   /* auto-fit tells the browser to handle resizing of the columns to fit the current width
   So we will get multiple columns or less depending on window size
   
