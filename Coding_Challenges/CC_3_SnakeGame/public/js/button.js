@@ -30,12 +30,16 @@ class Button {
    * Adds text to the center of the button
    *
    * @param {string} t the text to display inside the button
+   * @param {number} s the size of the text
+   * @param {const} f the font style of the text {NORMAL, ITALIC, BOLD, BOLDITALIC}
    * @memberof Button
    */
-  addText(t) {
+  addText(t, s=24, f = BOLD) {
     if(t !== undefined) {
       fill(255);
-      textAlign(CENTER);
+      textAlign(CENTER, CENTER);
+      textSize(s);
+      textStyle(f);
       text(t, this.x, this.y);
     }
   }

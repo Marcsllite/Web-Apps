@@ -25,14 +25,21 @@ class Snake extends Block {
     }
 
     if(this.size > 0) {
-      if(this.size === this.body.length) {
-        for (var i = 0; i < this.size - 1; i++) {
-          this.body[i] = this.body[i+1];
+      var tempX = this.x,
+          tempY = this.y;
+
+      // moving the body if the snake is moving
+      if (this.xSpeed > 0 && this.ySpeed > 0) {
+        if(this.size === this.body.length) {
+          for (var i = 0; i < this.size - 1; i++) {
+            this.body[i] = this.body[i+1];
+          }
         }
+        tempY += this.r;
       }
 
       // adding a block to the beginning of the array
-      this.body[this.size - 1] = new Block(this.x, this.y);
+      this.body[this.size - 1] = new Block(tempX, tempY);
     }
 
     super.update();
@@ -74,6 +81,21 @@ class Snake extends Block {
     super.dir(x, y);
   };
 
+  isColliding(x = -1, y = -1) {
+    // returning false if user did not
+    // provide a proper location
+    if(x === -1 || y === -1) {
+      return false;
+    } else {
+      this.body.forEach(b => {
+        if(b.x === x && b.y === y){
+          return true;
+        }
+      });
+      return this.x === x && this.y === y;
+    }
+  }
+
   eat(block) {
     if(block instanceof Block){
       if(dist(block.x, block.y, this.x, this.y) <= 0) {
@@ -87,9 +109,16 @@ class Snake extends Block {
   }
 
   death() {
-    var ret = (this.x === 0 - this.r || this.x == width ||
-              this.y === 0 - this.r || this.y == height);
+    // checking if the snake has gone out of bounds
+    var ret = (this.x === - this.r || this.x == width ||
+              this.y === - this.r || this.y == height);
     
+    // returning true if the snake is out of bounds 
+    if(ret) {
+      return ret;
+    }
+
+     // checking if the snake has touched its body
     for (var i = 0; i < this.body.length; i++) {
      if(dist(this.x, this.y, this.body[i].x, this.body[i].y) < 1) {
        ret = true;

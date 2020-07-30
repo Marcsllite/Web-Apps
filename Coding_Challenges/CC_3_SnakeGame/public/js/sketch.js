@@ -2,6 +2,7 @@ var s, f;  // variable to hold the snake and food
 var state; // variable to hold the game's current state
 var img;  // variable to hold the end of game image
 var hammer; // variable to hold the hammer.js object
+var test = 0;
 
 function setup() {
   // selecting the smallest side length and using that to create a square canvass
@@ -72,19 +73,28 @@ function start() {
 function playing() {
   background(51);
   f.show();
+
   if(s.death()) {
-    img
     state = 2;
   }
   s.update();
   s.show();
   if(s.eat(f)) {
     f.pickLocation();
+    while(s.isColliding(f.x, f.y)) {
+      f.pickLocation();
+    }
   }
 }
 
 function end() {
   background(img);
+  if(!test) {
+    console.log('Bounds: height: 0 - ' + height + ', width: 0 - ' + width);
+    console.log('Snake end location: (' + s.x + ", " + s.y + ")");
+    console.log('Food end location: (' + f.x + ", " + f.y + ")");
+    test++;
+  }
   if(mouseIsPressed){
     state = 1;
   }
