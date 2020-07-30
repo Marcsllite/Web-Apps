@@ -16,8 +16,8 @@ function setup() {
     r = 200;
   }
 
-  // var canvasHolder = document.querySelector('.canvasHolder');
-  createCanvas(r, r);//.parent(canvasHolder);  // creating square canvas
+  var canvasHolder = document.querySelector('.canvasHolder');
+  createCanvas(r, r).parent(canvasHolder);  // creating square canvas
   frameRate(10);  // lowering framerate for aesthetics
   
   s = new Snake();  // initializing a white snake at a random location

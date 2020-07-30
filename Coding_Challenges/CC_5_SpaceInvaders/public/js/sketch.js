@@ -1,12 +1,41 @@
+var hammer; // variable to hold the hammer.js object
 var ship;
 var drops = [];
 var flowers = [];
 var flowerOnEdge;
 
 function setup() {
-  createCanvas(600, 400);
+  // selecting the smallest side length and using that to create a square canvass
+  var smallestR = (displayWidth > displayHeight)? displayHeight : displayWidth;
+
+  // making sure the smallest side length is no greater than 600 pixels
+  // making sure the smallest side length is 90% of the display
+  var r = smallestR > 600? 600 : smallestR * .9;
+
+  // making sure the smallest side length is no smaller than 200 pixels
+  if(r < 200) {
+    r = 200;
+  }
+
+  var canvasHolder = document.querySelector('.canvasHolder');
+  createCanvas(r, r).parent(canvasHolder);  // creating square canvas
+
+  // creating hammer.js options
+  var options = {
+    preventDefault: true
+  };
+  // creating hammer object that checks the entire document
+  hammer = new Hammer(document, options);
+  
+  // allowing the user to swipe in any direction
+  hammer.get('swipe').set({
+    direction: Hammer.DIRECTION_ALL
+  });
+
+  hammer.on("swipe", swiped);  // calling swiped function on swipe action
+
   flowerOnEdge = false;
-  ship = new Ship(width/2, 20);
+  ship = new Ship();
 
   drop = new Drop(width/2, height/2, 8, color(0, 0, 150))
   for(var i = 0; i < 6; i++) {
@@ -65,6 +94,11 @@ function keyReleased(){
   }
 }
 
+function mousePressed() {
+  var drop = new Drop(ship.x, height, 8);
+  drops.push(drop);
+}
+
 function keyPressed() {
   if(key == ' ') {
     var drop = new Drop(ship.x, height, 8);
@@ -75,5 +109,13 @@ function keyPressed() {
     ship.dir(-5, 0);
   } else if(keyCode === RIGHT_ARROW) {
     ship.dir(5, 0);
+  }
+}
+
+function swiped(event) {
+  if (event.direction == 8) {  // UP
+  } else if (event.direction == 16) {  // DOWN
+  }  else if (event.direction == 2) {  // LEFT
+  } else if (event.direction == 4) {  // RIGHT
   }
 }

@@ -1,3 +1,5 @@
+
+var hammer; // variable to hold the hammer.js object
 var cells = [];
 var startingClicks;
 var previousClicks;
@@ -5,11 +7,40 @@ var currentClicks;
 
 
 function setup() {
-  createCanvas(500, 500);
+  // selecting the smallest side length and using that to create a square canvass
+  var smallestR = (displayWidth > displayHeight)? displayHeight : displayWidth;
+
+  // making sure the smallest side length is no greater than 600 pixels
+  // making sure the smallest side length is 90% of the display
+  var r = smallestR > 600? 600 : smallestR * .9;
+
+  // making sure the smallest side length is no smaller than 200 pixels
+  if(r < 200) {
+    r = 200;
+  }
+
+  var canvasHolder = document.querySelector('.canvasHolder');
+  createCanvas(r, r).parent(canvasHolder);  // creating square canvas
+
+  // creating hammer.js options
+  var options = {
+    preventDefault: true
+  };
+  // creating hammer object that checks the entire document
+  hammer = new Hammer(document, options);
+  
+  // allowing the user to swipe in any direction
+  hammer.get('swipe').set({
+    direction: Hammer.DIRECTION_ALL
+  });
+
+  hammer.on("swipe", swiped);  // calling swiped function on swipe action
+
   startingClicks = 10;
   previousClicks = startingClicks;
   currentClicks = startingClicks;
-  cells.push(new Cell(undefined, 240, color(random(100, 255), random(100, 255), 0, 150)));
+  var radius = 1.25 * (smallestR / 4);
+  cells.push(new Cell(undefined, radius, color(random(100, 255), random(100, 255), 0, 150)));
 }
 
 function draw() {
@@ -62,5 +93,13 @@ function mousePressed() {
 
   if(count === 0) {
     currentClicks--;
+  }
+}
+
+function swiped(event) {
+  if (event.direction == 8) {  // UP
+  } else if (event.direction == 16) {  // DOWN
+  }  else if (event.direction == 2) {  // LEFT
+  } else if (event.direction == 4) {  // RIGHT
   }
 }
