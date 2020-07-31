@@ -107,6 +107,7 @@ img {
 .boxes {
   display: grid;
   grid-gap: 20px;
+  grid-auto-rows: 1fr;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   /* auto-fit tells the browser to handle resizing of the columns to fit the current width
   So we will get multiple columns or less depending on window size
@@ -123,26 +124,21 @@ img {
   (if auto-fit = 5 and there are 5 boxes, each box will be 1/5 the screen width)*/
 }
 
-.box {
-  background:var(--primary1Dark);
-  color: var(--onPrimary1);
-  text-align: center;
-  padding: 1.5rem 1rem;
-}
-
-.box:hover {
-  background: var(--secondary1Dark);
-  color: var(--primary1Light);
-  border: 1px solid var(--primary1Light);
-}
-
 .boxlink {
+  background:var(--primary1Dark);
   color: var(--onPrimary1);
   display: inline;
   text-decoration: none;
   text-align: center;
   font-style: normal;
   text-transform: none;
+  padding: 1.5rem 1rem;
+}
+
+.boxlink:hover {
+  background: var(--secondary1Dark);
+  color: var(--primary1Light);
+  border: 1px solid var(--primary1Light);
 }
 
 .boxh4 {
