@@ -57,6 +57,9 @@ function draw() {
     case 2:
       end();
       break;
+    case 3:
+      win();
+      break;
   }
 }
 
@@ -96,6 +99,18 @@ function end() {
     test++;
   }
   if(mouseIsPressed){
+    state = 1;
+  }
+}
+
+function win() {
+  s.dir(0, 0);
+  background(51);
+  f.show();
+}
+
+function mousePressed() {
+  if(state === 3) {
     state = 1;
   }
 }

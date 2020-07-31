@@ -78,6 +78,11 @@ function reset() {
   cells.push(new Cell(undefined, 240, color(random(100, 255), random(100, 255), 0, 150)));
 }
 
+function decreaseClicks() {
+  previousClicks = currentClicks;
+  currentClicks--;
+}
+
 function mousePressed() {
   previousClicks = currentClicks;
   var count = 0;

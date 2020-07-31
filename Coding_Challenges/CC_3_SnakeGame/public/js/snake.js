@@ -29,13 +29,14 @@ class Snake extends Block {
           tempY = this.y;
 
       // moving the body if the snake is moving
-      if (this.xSpeed > 0 && this.ySpeed > 0) {
+      if (this.xSpeed !== 0 || this.ySpeed !== 0) {
         if(this.size === this.body.length) {
           for (var i = 0; i < this.size - 1; i++) {
             this.body[i] = this.body[i+1];
           }
         }
-        tempY += this.r;
+      } else if(this.xSpeed === 0 && this.ySpeed === 0) {
+        super.moveSteps('down');
       }
 
       // adding a block to the beginning of the array
@@ -94,6 +95,12 @@ class Snake extends Block {
       });
       return this.x === x && this.y === y;
     }
+  }
+
+  win() {
+    var numCols = floor(width / this.r) - 1;
+    var numRows = floor(height / this.r) - 1;
+    return this.body.length + 1 === (numCols * numRows);
   }
 
   eat(block) {
