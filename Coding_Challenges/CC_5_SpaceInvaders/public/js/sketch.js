@@ -1,8 +1,8 @@
-var hammer; // variable to hold the hammer.js object
-var ship;
-var drops = [];
-var flowers = [];
-var flowerOnEdge;
+// var hammer; // variable to hold the hammer.js object
+var can;
+var drops = [];  // array to hold the water drops
+var flowers = [];  // array to hold the flowers
+var numFlowers = 35;  // maximum number of flowers in the array
 
 function setup() {
   // selecting the smallest side length and using that to create a square canvass
@@ -20,39 +20,75 @@ function setup() {
   var canvasHolder = document.querySelector('.canvasHolder');
   createCanvas(r, r).parent(canvasHolder);  // creating square canvas
 
-  // creating hammer.js options
-  var options = {
-    preventDefault: true
-  };
-  // creating hammer object that checks the entire document
-  hammer = new Hammer(document, options);
+  // // creating hammer.js options
+  // var options = {
+  //   preventDefault: true
+  // };
+  // // creating hammer object that checks the entire document
+  // hammer = new Hammer(document, options);
   
-  // allowing the user to swipe in any direction
-  hammer.get('swipe').set({
-    direction: Hammer.DIRECTION_ALL
-  });
+  // // allowing the user to swipe in any direction
+  // hammer.get('swipe').set({
+  //   direction: Hammer.DIRECTION_ALL
+  // });
 
-  hammer.on("swipe", swiped);  // calling swiped function on swipe action
+  // hammer.on("swipe", swiped);  // calling swiped function on swipe action
 
-  flowerOnEdge = false;
-  ship = new Ship();
+  var overlapping,  // true is flowers are overlapping o.w false
+      loops = 0;  // keeps track of the number of times the while loop has run
+  
+  // looping until we've reached the max number of flowers
+  while(flowers.length < numFlowers) {  
+    overlapping = false;  // assuming flower is not overlapping
+    
+    // selecting sa random position and radius
+    var randX = random(r/16, r - (r/16)), 
+        randY = random(r - (r/3), r - (r/16)),
+        randR = random(20, 31);
 
-  drop = new Drop(width/2, height/2, 8, color(0, 0, 150))
-  for(var i = 0; i < 6; i++) {
-    flowers[i] = new Flower(i*80+80, 50, 30, color(150, 0, 0, 150));
+    // making sure that the position and size we selected
+    // does not lead to any overlap with the previously created flowers
+    flowers.forEach(other => {
+      var d = dist(randX, randY, other.x, other.y);
+      if(d < randR + other.r) {
+        overlapping = true;
+      }
+    });
+
+    // if the position and size did not cause an overlap
+    // add the flower to the end of the array
+    // resetting the number of times the loop
+    // has run without adding a new flower
+    if(!overlapping) {
+      // console.log(`index ${flowers.length}: ${loops} loops`);
+      flowers[flowers.length] = new Flower(randX, randY, randR);
+      loops = 0;
+    }
+
+    // updating the number of times the while loop has run
+    // without adding a flower
+    loops++;
+    // breaking out of the loop if it is stuck
+    // i.e: looped over 1000 times before adding a new flower
+    if(loops >= 1000) {
+      break;
+    }
   }
+
+  // drops[0] = new Drop(width/2 - 8, 0, 8);
+  // drops[0].setDestination(undefined, height);
 }
 
 function draw() {
   background(51);
-  ship.show();
-  ship.move();
 
   for(var i = drops.length - 1; i >= 0; i--) {
-    // checking if the drop hits the flower and growing the flower
+    // checking if the drop hits the flower
+    // and making the flower wither and
+    // noting that drop needs to be removed from the array
     flowers.forEach(flower => {
-      if(drops[i].hits(flower)) {
-        flower.grow(drops[i].r);
+      if(flower.hit(drops[i])) {
+        flower.wither();
         drops[i].evaporate();
       }
     });
@@ -63,59 +99,63 @@ function draw() {
       break;
     }
 
-    // showing and moving the drops
-    drops[i].show();
-    drops[i].move();
-  }
-  
-  // drawing and moving the flower 
-  flowers.forEach(flower => {
-    flower.show();
-    flower.move();
-    if(flower.onEdge()) {
-      flowerOnEdge = true;
+     // removing the flower if it has no more petals
+    for(var j = flowers.length - 1; j >= 0; j--) {
+      if(flowers[j].dead) {
+        flowers.splice(j, 1);
+        break;
+      }
     }
+
+    // Showing and moving the drops
+    drops[i].move();
+    drops[i].show();
+  }
+
+  // drawing the flowers
+  // and making them bobble
+  flowers.forEach(flower => {
+    push();
+    flower.update();
+    flower.move();
+    flower.show();
+    pop();
   });
-
-  // moving shifting all the flowers down if one of them is on the edge
-  if(flowerOnEdge){
-    flowers.forEach(flower => {
-      flower.shiftDown();
-    });
-    flowerOnEdge = false;
-  }
+  // noLoop();
 }
 
-function keyReleased(){
-  if(keyCode === LEFT_ARROW) {
-    ship.dir(0, undefined);
-  } else if(keyCode === RIGHT_ARROW) {
-    ship.dir(undefined, 0);
-  }
-}
+// function keyReleased(){
+//   if(keyCode === LEFT_ARROW) {
+//     ship.dir(0, undefined);
+//   } else if(keyCode === RIGHT_ARROW) {
+//     ship.dir(undefined, 0);
+//   }
+// }
 
 function mousePressed() {
-  var drop = new Drop(ship.x, height, 8);
+  var drop = new Drop(width/2, 0, 8);
+  drop.setDestination(mouseX, mouseY);
   drops.push(drop);
 }
 
 function keyPressed() {
   if(key == ' ') {
-    var drop = new Drop(ship.x, height, 8);
+    var drop = new Drop(width/2, 0, 8);
+    drop.setDestination(undefined, height);
     drops.push(drop);
   }
 
-  if(keyCode === LEFT_ARROW) {
-    ship.dir(-5, 0);
-  } else if(keyCode === RIGHT_ARROW) {
-    ship.dir(5, 0);
-  }
+  // if(keyCode === LEFT_ARROW) {
+  //   ship.dir(-5, 0);
+  // } else if(keyCode === RIGHT_ARROW) {
+  //   ship.dir(5, 0);
+  // }
 }
 
-function swiped(event) {
-  if (event.direction == 8) {  // UP
-  } else if (event.direction == 16) {  // DOWN
-  }  else if (event.direction == 2) {  // LEFT
-  } else if (event.direction == 4) {  // RIGHT
-  }
-}
+// function swiped(event) {
+//   if (event.direction == 8) {  // UP
+//   } else if (event.direction == 16) {  // DOWN
+//   }  else if (event.direction == 2) {  // LEFT
+//   } else if (event.direction == 4) {  // RIGHT
+//   }
+// }
