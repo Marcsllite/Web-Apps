@@ -2,7 +2,7 @@
 var can;
 var drops = [];  // array to hold the water drops
 var flowers = [];  // array to hold the flowers
-var numFlowers = 35;  // maximum number of flowers in the array
+var numFlowers = 25;  // maximum number of flowers in the array
 
 function setup() {
   // selecting the smallest side length and using that to create a square canvass
@@ -75,14 +75,35 @@ function setup() {
     }
   }
 
-  // drops[0] = new Drop(width/2 - 8, 0, 8);
-  // drops[0].setDestination(undefined, height);
+  setInterval(() => {
+    flowers.forEach(flower => {
+      flower.grow();
+    });
+  }, 3000);
 }
 
 function draw() {
   background(51);
 
+  if(flowers.length === 0) {
+    noLoop();
+  }
+
+  // drawing the flowers
+  // and making them bobble
+  flowers.forEach(flower => {
+    flower.move();
+    flower.show();
+    if(flower.top) {
+      noLoop();
+    }
+  });
+
   for(var i = drops.length - 1; i >= 0; i--) {
+    // Showing and moving the drops
+    drops[i].move();
+    drops[i].show();
+
     // checking if the drop hits the flower
     // and making the flower wither and
     // noting that drop needs to be removed from the array
@@ -106,21 +127,8 @@ function draw() {
         break;
       }
     }
-
-    // Showing and moving the drops
-    drops[i].move();
-    drops[i].show();
   }
-
-  // drawing the flowers
-  // and making them bobble
-  flowers.forEach(flower => {
-    push();
-    flower.update();
-    flower.move();
-    flower.show();
-    pop();
-  });
+  
   // noLoop();
 }
 

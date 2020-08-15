@@ -1,9 +1,11 @@
 class Flower {
   constructor(x = width/2, y = height/2, r = 15, c) {
     this.x = x;
-    this.y = y
+    this.y = y;
+    this.logged = false;
     this.sX = x;
     this.sY = y;
+    this.top = false;
     this.r = r;
     this.xDir = 1;
     this.yDir = 0;
@@ -29,22 +31,39 @@ class Flower {
   }
 
   move() {
-    translate(this.x, height);
-    rotate(radians(this.angle));
-    translate(-this.x, -height);
-  }
+    var oldX = this.x,
+        oldY = this.y;
 
-  update() {
+    // rotating the flower about (this.sX, height)
+    this.x = cos(radians(this.angleDir)) * (oldX - this.sX) - 
+             sin(radians(this.angleDir)) * (oldY - height) + this.sX; 
+    this.y = sin(radians(this.angleDir)) * (oldX - this.sX) +
+             cos(radians(this.angleDir)) * (oldY - height) + height;
+
+    if(this.y <= 0) {
+      this.top = true;
+    }
+    
+    this.angle += this.angleDir;  // keeping track of the total angle rotated
+    
+    // making sure we don't rotate past 30 degrees or -30 degrees
     if(this.angle >= 30) {
       this.angleDir = random(-1, 0);
     } else if(this.angle <= -30){
       this.angleDir = random();
     }
-    this.angle += this.angleDir;
   }
 
   onEdge() {
     return this.x >= width - this.r || this.x <= this.r;
+  }
+
+  grow() {
+    this.y -= 5;
+
+    if(this.y <= 0) {
+      this.top = true;
+    }
   }
 
   wither() {
@@ -58,6 +77,7 @@ class Flower {
   hit(drop) {
     if(drop instanceof Drop) {
       var d = dist(this.x, this.y, drop.x, drop.y);
+
       if(this.health > 0) {
         return d <= this.r * .75 + drop.r;
       } else {
@@ -67,32 +87,49 @@ class Flower {
     return false;
   }
 
-  drawFlower(){
+  drawFlower(x = this.x, y = this.y, c){
+    c = (c instanceof p5.Color)? c : this.c;
+
     // drawing center petal
+    push();
     noStroke();
     fill(255);
     ellipseMode(RADIUS);
     var radius = this.r * .25;
-    ellipse(this.x, this.y, radius, radius);
+    ellipse(x, y, radius, radius);
+    pop();
 
     // drawing petals that go around the center
-    noStroke();
-    fill(this.c);
-    ellipseMode(CORNER);
-
     push();
-    translate(this.x, this.y);
+    noStroke();
+    fill(c);
+    ellipseMode(CORNER);
+    
+    translate(x, y);
+    // // variables for holding the current and old
+    // // petal x and y location
+    // var pX = x + radius, pY = y + radius, oldPX, oldPY;
     for (let i = 0; i < this.health; i ++) {
+      // oldPX = pX, oldPY = pY;
+      // ellipse(pX, pY, this.r, this.r/(this.numPetals * .5));
       ellipse(0, 0, this.r, this.r/(this.numPetals * .5));
       rotate(PI/this.numPetals);
+
+      // // rotating the petal about (x, y)
+      // pX = cos(PI/this.numPetals) * (oldPX - x) - 
+      //     sin(PI/this.numPetals) * (oldPY - y) + x; 
+      // pX = sin(PI/this.numPetals) * (oldPX - x) +
+      //     cos(PI/this.numPetals) * (oldPY - y) + y;
     }
     pop();
   }
 
-  drawStem() {
+  drawStem(x = this.x, y = this.y, c = color(0, 204, 0, 75)) {
+    push();
     noFill();
-    stroke(0, 204, 0, 75);
+    stroke(c);
     strokeWeight(5);
-    line(this.x, this.y, this.x, height);
+    line(x, y, this.sX, height);
+    pop();
   }
 }
