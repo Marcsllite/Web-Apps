@@ -1,11 +1,16 @@
 class Drop {
   constructor(x, y, r, c) {
+    // keeps track of drop's current location
+    // radius and color
     this.x = x;
     this.y = y
     this.r = r;
-    this.steps = 5;
-    this.d = {xDir: x, yDir: y};  // object to hold the destination of the drop
     this.c = (c instanceof p5.Color)? c : color(255, 255, 255);
+
+    // how fast drop will move while moving to its destination
+    this.steps = 5;
+    this.d = {xDir: x, yDir: y};  // the destination of the drop
+    
     this.toDelete = false;
   }
 
@@ -13,12 +18,6 @@ class Drop {
     fill(this.c);
     ellipseMode(RADIUS);
     ellipse(this.x, this.y, this.r, this.r);
-
-    // push();
-    // stroke(255);
-    // strokeWeight(3);
-    // line(width/2, 0, this.d.xDir, this.d.yDir);
-    // pop();
   }
 
   setDestination(x = this.x, y = this.y) {
@@ -76,8 +75,6 @@ class Drop {
       xDir = (min * this.steps) / max;
       yDir = this.steps;
     }
-
-    // console.log(`xDir: ${xDir}, yDir: ${yDir}`);
 
     // moving the drop
     this.x += xDir;

@@ -1,8 +1,13 @@
-// var hammer; // variable to hold the hammer.js object
-var can;
+var can,  // holds the watering can
+    r,  // width and height of the canvas
+    interval = 3000,  // delay (milliseconds) for the flowers growing
+    state; // variable to hold the game's current state 
 var drops = [];  // array to hold the water drops
 var flowers = [];  // array to hold the flowers
 var numFlowers = 25;  // maximum number of flowers in the array
+var loadingFlower;  // holds the flower in the loading screen
+var grow;  // interval function
+var clicked = false;
 
 function setup() {
   // selecting the smallest side length and using that to create a square canvass
@@ -10,7 +15,7 @@ function setup() {
 
   // making sure the smallest side length is no greater than 600 pixels
   // making sure the smallest side length is 90% of the display
-  var r = smallestR > 600? 600 : smallestR * .9;
+  r = smallestR > 600? 600 : smallestR * .9;
 
   // making sure the smallest side length is no smaller than 200 pixels
   if(r < 200) {
@@ -20,20 +25,56 @@ function setup() {
   var canvasHolder = document.querySelector('.canvasHolder');
   createCanvas(r, r).parent(canvasHolder);  // creating square canvas
 
-  // // creating hammer.js options
-  // var options = {
-  //   preventDefault: true
-  // };
-  // // creating hammer object that checks the entire document
-  // hammer = new Hammer(document, options);
+  // setting state to start state
+  state = 0;
+}
+
+function draw() {
+  // drawing the current game state
+  switch (state) {
+    case 0:
+      start();
+      break;
+    case 1:
+      playing();
+      break;
+    case 2:
+      end();
+      break;
+    case 3:
+      win();
+      break;
+  }
+}
+
+function start() {
+  background(51);
+
+  if(loadingFlower === undefined) { 
+    loadingFlower = new Flower(r/2, r/2, r/2);
+  } 
+  loadingFlower.drawFlower();
+
+  push();
+  fill(0, 203, 0);
+  stroke(255);
+  strokeWeight(3);
+  textSize(70);
+  text('Flower Invaders', r/16, r/8);
+  pop();
   
-  // // allowing the user to swipe in any direction
-  // hammer.get('swipe').set({
-  //   direction: Hammer.DIRECTION_ALL
-  // });
+  // blinking the click to start text
+  if(frameCount % 60 < 30 && !clicked) {
+    push();
+    noStroke();
+    fill(255);
+    textSize(30);
+    text('Click to start game!', r/3, height - r/16);
+    pop();
+  }
+}
 
-  // hammer.on("swipe", swiped);  // calling swiped function on swipe action
-
+function setupPlaying() {
   var overlapping,  // true is flowers are overlapping o.w false
       loops = 0;  // keeps track of the number of times the while loop has run
   
@@ -42,9 +83,10 @@ function setup() {
     overlapping = false;  // assuming flower is not overlapping
     
     // selecting sa random position and radius
+    // scaling radius depending on the canvas size
     var randX = random(r/16, r - (r/16)), 
         randY = random(r - (r/3), r - (r/16)),
-        randR = random(20, 31);
+        randR = map(random(20, 31),20, 31, r/30, (3*r)/60);
 
     // making sure that the position and size we selected
     // does not lead to any overlap with the previously created flowers
@@ -57,10 +99,9 @@ function setup() {
 
     // if the position and size did not cause an overlap
     // add the flower to the end of the array
-    // resetting the number of times the loop
+    // and reset the number of times the loop
     // has run without adding a new flower
     if(!overlapping) {
-      // console.log(`index ${flowers.length}: ${loops} loops`);
       flowers[flowers.length] = new Flower(randX, randY, randR);
       loops = 0;
     }
@@ -74,17 +115,22 @@ function setup() {
       break;
     }
   }
-
-  setInterval(() => {
+  
+  // growing the flowers every three seconds
+  grow = setInterval(() => {
     flowers.forEach(flower => {
       flower.grow();
     });
-  }, 3000);
+  }, interval);
+
+  state = 1;
 }
 
-function draw() {
+function playing() {
   background(51);
 
+  // stopping everything if the user
+  // removed all the flowers
   if(flowers.length === 0) {
     noLoop();
   }
@@ -128,42 +174,48 @@ function draw() {
       }
     }
   }
-  
-  // noLoop();
 }
 
-// function keyReleased(){
-//   if(keyCode === LEFT_ARROW) {
-//     ship.dir(0, undefined);
-//   } else if(keyCode === RIGHT_ARROW) {
-//     ship.dir(undefined, 0);
-//   }
-// }
+function end() {
+
+}
+
+function win() {
+
+}
 
 function mousePressed() {
-  var drop = new Drop(width/2, 0, 8);
-  drop.setDestination(mouseX, mouseY);
-  drops.push(drop);
+  switch (state) {
+    case 0:
+      clicked = true;
+      animation = setInterval(() => {
+        if(loadingFlower.dead) {
+          setupPlaying();
+          // stopping withering animation
+          clearInterval(animation);
+        } else {
+          loadingFlower.wither();
+        }
+      }, 250);
+      break;
+    case 1:
+      var drop = new Drop(width/2, 0, (4*r)/300);
+      drop.setDestination(mouseX, mouseY);
+      drops.push(drop);
+      break;
+  }
 }
 
 function keyPressed() {
-  if(key == ' ') {
-    var drop = new Drop(width/2, 0, 8);
-    drop.setDestination(undefined, height);
-    drops.push(drop);
+  switch (state) {
+    case 0:
+      
+      break;
+    case 1:
+      if(key == ' ') {
+        var drop = new Drop(width/2, 0, (4*r)/300);
+        drop.setDestination(undefined, height);
+        drops.push(drop);
+      }
   }
-
-  // if(keyCode === LEFT_ARROW) {
-  //   ship.dir(-5, 0);
-  // } else if(keyCode === RIGHT_ARROW) {
-  //   ship.dir(5, 0);
-  // }
 }
-
-// function swiped(event) {
-//   if (event.direction == 8) {  // UP
-//   } else if (event.direction == 16) {  // DOWN
-//   }  else if (event.direction == 2) {  // LEFT
-//   } else if (event.direction == 4) {  // RIGHT
-//   }
-// }

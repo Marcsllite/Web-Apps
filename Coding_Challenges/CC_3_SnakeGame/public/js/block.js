@@ -95,7 +95,6 @@ class Block {
     var randRow = floor(random(numRows));
     this.x = (x == undefined)? randCol * this.r : x;
     this.y = (y == undefined)? randRow * this.r : y;
-    console.log(`${this.constructor.name} new location = (${this.x}, ${this.y})`);
     this.dir();
   }
 }

@@ -35,6 +35,29 @@ body {
   line-height: 1.4;
 }
 
+.examples {
+  background: var(--secondary1);
+  margin: auto;
+  width: 75%;
+  border: 4px solid var(--primary1);
+  text-align: center;
+}
+
+.nc {
+  text-align: left;
+}
+
+.sectHead {
+  text-align: center;
+}
+
+hr {
+  border-color: var(--primary1);
+  height: 3px;
+  width: 100%;
+  border-width: medium;
+}
+
 div.wrapper {
   display: grid;
   gap: 20px;

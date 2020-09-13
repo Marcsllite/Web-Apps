@@ -1,33 +1,33 @@
 class Flower {
   constructor(x = width/2, y = height/2, r = 15, c) {
+    // keeps track of flower's current location
+    // radius and color
     this.x = x;
     this.y = y;
-    this.logged = false;
-    this.sX = x;
-    this.sY = y;
-    this.top = false;
     this.r = r;
-    this.xDir = 1;
-    this.yDir = 0;
-    this.angleDir = random(-1, 2);
-    this.angle = 0;
-    this.dead = false;
-    this.numPetals = floor(random(3, 7));
-    this.health = this.numPetals * 2;
+    // getting a random rgb value for the flower's color
     var randRed = random(150, 255),
         randGreen = random(150, 255),
         randBlue = random(150, 255);
-    this.c = (c instanceof p5.Color)? c : color(randRed, randGreen, randBlue, 100);
+    this.c = (c instanceof p5.Color)?
+             c : color(randRed, randGreen, randBlue, 100);
+
+    // keeps track of flower's starting location
+    this.sX = x;
+    this.sY = y;
+
+    this.top = false;  // whether the flower has reached the top
+    
+    this.angleDir = random(-1, 2);  // value to change the flower's angle by
+    this.angle = 0;  // how much the flower has been rotated since creation (degrees)
+    this.dead = false;  // if the flower has no more petals left
+    this.numRotations = floor(random(3, 7));  // number of times to rotate the petals
+    this.health = this.numRotations * 2;  // hp of flower (number of petals)
   }
 
   show() {
     this.drawFlower();
     this.drawStem();
-  }
-
-  dir(x, y) {
-    this.xDir = x;
-    this.yDir = y;
   }
 
   move() {
@@ -40,9 +40,7 @@ class Flower {
     this.y = sin(radians(this.angleDir)) * (oldX - this.sX) +
              cos(radians(this.angleDir)) * (oldY - height) + height;
 
-    if(this.y <= 0) {
-      this.top = true;
-    }
+    this.top = this.y <= 0;  // checking if the flower has reached the top
     
     this.angle += this.angleDir;  // keeping track of the total angle rotated
     
@@ -54,20 +52,17 @@ class Flower {
     }
   }
 
-  onEdge() {
-    return this.x >= width - this.r || this.x <= this.r;
-  }
-
   grow() {
     this.y -= 5;
 
-    if(this.y <= 0) {
-      this.top = true;
-    }
+    // checking if the flower has reached the top
+    this.top = this.y <= 0;  
   }
 
   wither() {
     this.health--;
+
+    // checking to see if flower has no more petals
     if(this.health <= 0) {
       this.dead = true;
       this.health = 0;
@@ -106,20 +101,9 @@ class Flower {
     ellipseMode(CORNER);
     
     translate(x, y);
-    // // variables for holding the current and old
-    // // petal x and y location
-    // var pX = x + radius, pY = y + radius, oldPX, oldPY;
     for (let i = 0; i < this.health; i ++) {
-      // oldPX = pX, oldPY = pY;
-      // ellipse(pX, pY, this.r, this.r/(this.numPetals * .5));
-      ellipse(0, 0, this.r, this.r/(this.numPetals * .5));
-      rotate(PI/this.numPetals);
-
-      // // rotating the petal about (x, y)
-      // pX = cos(PI/this.numPetals) * (oldPX - x) - 
-      //     sin(PI/this.numPetals) * (oldPY - y) + x; 
-      // pX = sin(PI/this.numPetals) * (oldPX - x) +
-      //     cos(PI/this.numPetals) * (oldPY - y) + y;
+      ellipse(0, 0, this.r, this.r/(this.numRotations * .5));
+      rotate(PI/this.numRotations);
     }
     pop();
   }

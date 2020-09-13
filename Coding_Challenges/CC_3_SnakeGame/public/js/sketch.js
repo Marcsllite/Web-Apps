@@ -2,7 +2,6 @@ var s, f;  // variable to hold the snake and food
 var state; // variable to hold the game's current state
 var img;  // variable to hold the end of game image
 var hammer; // variable to hold the hammer.js object
-var test = 0;
 
 function setup() {
   // selecting the smallest side length and using that to create a square canvass
@@ -28,7 +27,25 @@ function setup() {
   state = 0;  // initializing the game state to the start screen
 
   // initializing the end of game image
-  img = loadImage('img/end.png');
+  if(r >= 200 && r < 250) {
+    img = loadImage('img/end_200.png');
+  } else if(r >= 250 && r < 300) {
+    img = loadImage('img/end_200.png');
+  } else if(r >= 300 && r < 350) {
+    img = loadImage('img/end_300.png');
+  } else if(r >= 350 && r < 400) {
+    img = loadImage('img/end_300.png');
+  } else if(r >= 400 && r < 450) {
+    img = loadImage('img/end_400.png');
+  } else if(r >= 450 && r < 500) {
+    img = loadImage('img/end_400.png');
+  } else if(r >= 500 && r < 550) {
+    img = loadImage('img/end_500.png');
+  } else if(r >= 550 && r < 600) {
+    img = loadImage('img/end_500.png');
+  } else {
+    img = loadImage('img/end_600.png');
+  }
 
   // creating hammer.js options
   var options = {
@@ -92,12 +109,6 @@ function playing() {
 
 function end() {
   background(img);
-  if(!test) {
-    console.log('Bounds: height: 0 - ' + height + ', width: 0 - ' + width);
-    console.log('Snake end location: (' + s.x + ", " + s.y + ")");
-    console.log('Food end location: (' + f.x + ", " + f.y + ")");
-    test++;
-  }
   if(mouseIsPressed){
     state = 1;
   }
