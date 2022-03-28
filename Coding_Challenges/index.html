@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/8234e46aad.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../styles.css">
+  <title>Learning CSS</title>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="main-nav">
+      <ul class="contents">
+        <li><a href="/index.html">Navigation Menu</a></li>
+      </ul>
+    </div>
+
+    <section class="intro">
+      <div class="intro-box">
+        <h1>P5.js Coding Challenges</h1>
+        <p>
+          This page contains links to all the p5.js coding challenges
+          I am working on. The challenges are from <a href="https://www.youtube.com/c/TheCodingTrain/">The Coding Train</a>
+          YouTube channel's <a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZiZxtDDRCi6uhfTH4FilpH">coding challenges</a> playlist.
+          I have added my spin to each challenge on top of going along with the flow of the videos.
+        </p>
+      </div>
+    </section>
+
+    <section class="boxes">
+      <a class="boxlink" href="CC_3_SnakeGame/public/index.html">
+        <div class="box">
+          <h4 class="boxh4">CC-3: Snake Game</h4>
+          <p><strong>Keyboard Controls: </strong><br>mousePress, up, down, left, right<br>
+            <strong>Mobile Controls: </strong>tapping, swiping<br>
+          </p>
+          <p>
+            <strong>Description: </strong><br>In this coding challenge
+            I created a snake game. The snake and food start out in a random location on the board
+            and the snake is white and the food is red. The goal of the game is to eat enough food where 
+            the snake fills the entire board. The player will fail if the snake's head touches its body 
+            or the snake tries to leave the screen. Upon losing an image will pop up and the user can click 
+            that image to play again. There is no score mechanic, but I might add that in at a later time.
+          </p>
+        </div>
+      </a>
+      <a class="boxlink" href="CC_5_FlowerInvaders/public/index.html">
+        <div class="box">
+          <h4 class="boxh4">CC-5: Flower Invaders Game</h4>
+          <p>
+            <strong>Keyboard Controls: </strong><br>mouseClick<br>
+            <strong>Mobile Controls: </strong>tapping<br>
+          </p>
+          <p>
+            <strong>Description: </strong><br>This is a modified version of space invaders. Instead of space aliens
+            invading, there are flowers that start at the bottom of the screen and grow upwards. The player is a watering
+            can at the top of the screen sending drops of water to wither the flowers before they reach the top.
+            This game is not finished yet and currently only has the flowers swaying at the bottom of the screen,
+            drops that go from the top of the screen to where you clicked, the flowers can lose their petals
+            until they have withered away, and the flowers grow every 3 seconds until they reach the top. I still need 
+            to add the watering can at top of the screen, add the score, start, and game over screens. Currently the game
+            stops if a flower reaches the top or if the player withered all the flowers away.
+          </p>
+        </div>
+      </a>
+      <a class="boxlink" href="CC_6_MitosisSimulation/public/index.html">
+        <div class="box">
+          <h4 class="boxh4">CC-6: Mitosis Simulation</h4>
+          <p><strong>Keyboard Controls: </strong><br>mousePress<br>
+            <strong>Mobile Controls: </strong>tapping<br>
+          </p>
+          <p>
+            <strong>Description: </strong><br>This coding challenge starts off with a huge circle in the middle 
+            of the screen. When the user clicks on the circle it will divide into two smaller circles and the 
+            user can click one of those two smaller circles and they will divide and so on. At the bottom right 
+            of the screen is the number of lives the user has. if the user clicks on the screen and there is no 
+            circle present where they clicked the user loses a life. If the user clicks on the screen where there 
+            is a circle present the user gains a life. the lives text will turn green when the user gains a life and 
+            red if they lose one. When the circles reach a certain size they will resize back up to a properly clickable size.
+            All of the circles on the screen will be moving and bouncing off the edges so it is not as easy to click them.
+          </p>
+        </div>
+      </a>
+    </section>
+  </div>
+</body>
+</html>

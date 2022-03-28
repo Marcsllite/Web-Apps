@@ -4,7 +4,7 @@ const browserSync = require('browser-sync').create();
 
 function gulp_nodemon() {
   nodemon({
-    script: './src',
+    script: './server',
     ext: 'js html css'
   });
 };

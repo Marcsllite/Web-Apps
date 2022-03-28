@@ -16,8 +16,8 @@ function setup() {
     r = 200;
   }
 
-  // var canvasHolder = document.querySelector('.canvasHolder');
-  createCanvas(r, r);//.parent(canvasHolder);  // creating square canvas
+  var canvasHolder = document.querySelector('.canvasHolder');
+  createCanvas(r, r).parent(canvasHolder);  // creating square canvas
   frameRate(10);  // lowering framerate for aesthetics
   
   s = new Snake();  // initializing a white snake at a random location
@@ -27,7 +27,25 @@ function setup() {
   state = 0;  // initializing the game state to the start screen
 
   // initializing the end of game image
-  img = loadImage('img/end.png');
+  if(r >= 200 && r < 250) {
+    img = loadImage('img/end_200.png');
+  } else if(r >= 250 && r < 300) {
+    img = loadImage('img/end_200.png');
+  } else if(r >= 300 && r < 350) {
+    img = loadImage('img/end_300.png');
+  } else if(r >= 350 && r < 400) {
+    img = loadImage('img/end_300.png');
+  } else if(r >= 400 && r < 450) {
+    img = loadImage('img/end_400.png');
+  } else if(r >= 450 && r < 500) {
+    img = loadImage('img/end_400.png');
+  } else if(r >= 500 && r < 550) {
+    img = loadImage('img/end_500.png');
+  } else if(r >= 550 && r < 600) {
+    img = loadImage('img/end_500.png');
+  } else {
+    img = loadImage('img/end_600.png');
+  }
 
   // creating hammer.js options
   var options = {
@@ -56,6 +74,9 @@ function draw() {
     case 2:
       end();
       break;
+    case 3:
+      win();
+      break;
   }
 }
 
@@ -72,20 +93,35 @@ function start() {
 function playing() {
   background(51);
   f.show();
+
   if(s.death()) {
-    img
     state = 2;
   }
   s.update();
   s.show();
   if(s.eat(f)) {
     f.pickLocation();
+    while(s.isColliding(f.x, f.y)) {
+      f.pickLocation();
+    }
   }
 }
 
 function end() {
   background(img);
   if(mouseIsPressed){
+    state = 1;
+  }
+}
+
+function win() {
+  s.dir(0, 0);
+  background(51);
+  f.show();
+}
+
+function mousePressed() {
+  if(state === 3) {
     state = 1;
   }
 }

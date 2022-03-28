@@ -41,6 +41,34 @@ class Block {
   }
 
   /**
+   * Moves block the given number of steps
+   * in the given direction
+   * 
+   * @param {string} dir the direction to move the block 
+   *                {'up', 'down', 'left', 'right'}
+   * @param {number} steps the number of steps to move the block
+   */
+  moveSteps(dir = 'up', steps = 1,) {
+    switch(dir){
+      case 'up':
+        this.y = this.y - Math.abs(steps) * this.r;
+        break;
+      case 'down':
+        this.y = this.y + Math.abs(steps) * this.r;
+        break;
+      case 'left':
+        this.x = this.x - Math.abs(steps) * this.r;
+        break;
+      case 'right':
+        this.x = this.x + Math.abs(steps) * this.r;
+        break;
+      default:
+        console.log(`${this.constructor.name}.moveSteps(${dir}, ${steps}): invalid direction ${dir}`);
+        break;
+    }
+  }
+
+  /**
    * updates the x and y speed of the block
    *
    * @param {number} [x=0] the new x speed of the block
